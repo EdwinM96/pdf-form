@@ -15,7 +15,9 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.forms.PdfAcroForm;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,8 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class BaseController {
     
     public static final String DEST = "./Filled_Out.pdf";
-
-    public static final String SRC = "C:/Users/Edwin/Documents/NetBeansProjects/pdf-sample/Bank_Statement.pdf";
+    Logger l = Logger.getLogger("log");
     
     @RequestMapping("/form")
     public ModelAndView initializer(){
@@ -50,8 +51,9 @@ public class BaseController {
             @RequestParam(value = "deposits", defaultValue = "$38,389.92") String deposits,
             HttpServletResponse response) throws IOException{
         File file = File.createTempFile("demo", "file");
+        File fileSrc = new File("./Bank_Statement.pdf");
         String filename = "Bank Statement.pdf";
-        PdfDocument pdfDoc = new PdfDocument(new PdfReader(SRC), new PdfWriter(file));
+        PdfDocument pdfDoc = new PdfDocument(new PdfReader(fileSrc), new PdfWriter(file));
         PdfAcroForm form = PdfAcroForm.getAcroForm(pdfDoc, true);
         form.getField("OpeningBalance").setValue(openingBalance).setReadOnly(true);
         form.getField("CompleteName").setValue(fullName).setReadOnly(true);
